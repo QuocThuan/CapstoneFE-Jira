@@ -199,12 +199,16 @@ const ProjectDetail = () => {
   };
   const checkSelectPriorityName = (priorityName) => {
     switch (priorityName) {
+      case "high":
       case "High":
         return 1;
+      case "medium":
       case "Medium":
         return 2;
+      case "low":
       case "Low":
         return 3;
+      case "lowest":
       case "Lowest":
         return 4;
     }
@@ -379,7 +383,7 @@ const ProjectDetail = () => {
     checkStatus(arrTaskDetail.statusId)
   );
   const [selectedPriority, setSelectedPriority] = useState(
-    checkSelectPriority(arrTaskDetail.priorityId)
+    arrTaskDetail.priorityId
   );
 
   const [estimate, setEstimate] = useState(arrTaskDetail.originalEstimate);
@@ -460,8 +464,10 @@ const ProjectDetail = () => {
         timeTrackingRemaining: trackingRemaining || 0,
         priorityId: checkSelectPriorityName(selectedPriority) || 0,
       };
-
       await updateTaskApi(updatedTask);
+      handleCancel("modalViewTaskDetail");
+      message.success("Update task successfully");
+      getProjectDetailApi(params.projectId);
     } catch (error) {
       console.error("Error updating task:", error);
     }
